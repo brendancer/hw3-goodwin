@@ -1,16 +1,25 @@
-/*
+var password = [];
+
 var pwl = prompt(
   "Please choose a password length between 8 and 128 characters"
 );
 
 if (pwl < 8 || pwl > 128) {
-  alert("You chose " + pwl + ". Please choose a number between 8-128");
+  alert(
+    "You chose " +
+      pwl +
+      ". Please choose a number between 8-128. Refresh your screen to try again"
+  );
+  stop;
 } else {
   alert("Your Password will be " + pwl + " characters long.");
 }
 //boolean confirm generation
 var pwlc = confirm("would you like to include lowercase letters?");
 if (pwlc == true) {
+  var lower = randomLC();
+  password.push(lower);
+
   alert("I'll include lowercase letters");
 } else {
   alert("i won't use lower case letters");
@@ -19,6 +28,8 @@ if (pwlc == true) {
 var pwuc = confirm("would you like to include uppercase letters?");
 
 if (pwuc == true) {
+  var upper = randomUC();
+  password.push(upper);
   alert("I'll include uppercase letters");
 } else {
   alert("i won't use upper case letters");
@@ -27,6 +38,8 @@ if (pwuc == true) {
 var pwn = confirm("would you like to include numbers?");
 
 if (pwn == true) {
+  var number = randomNo();
+  password.push(number);
   alert("I'll include numbers");
 } else {
   alert("i won't use numbers");
@@ -35,6 +48,8 @@ if (pwn == true) {
 var pwsp = confirm("would you like to include Special Characters?");
 
 if (pwsp == true) {
+  var special = randomSC();
+  password.push(special);
   alert("I'll include special characters");
 } else {
   alert("i won't use special characters");
@@ -44,19 +59,22 @@ var ch = [{ pwlc }, { pwuc }, { pwn }, { pwsp }].filter(
   (item) => Object.values(item)[0]
 );
 
+console.log(password);
+
+var typecount = ch.length;
+
+console.log(ch, typecount);
+
 //rejecting a zero choice of character type
 if (ch.length == 0) {
   alert("you must choose at least one type of character");
 }
-*/
-// Assignment Code
-var generateBtn = document.querySelector("#generate");
-var resultEL = document.getElementById("result");
-var lengthEL = document.getElementById("length");
-var LCaseEL = document.getElementById("Lcase");
-var UCaseEL = document.getElementById("Ucase");
-var NumberEL = document.getElementById("number");
-var SpecCharEL = document.getElementById("SpecChar");
+var password = [];
+
+//Get password of the right length
+for (var i = 0; i <= pwl; i++) {
+  password.push(ch[i]);
+}
 
 // Write password to the #password input
 function writePassword() {
@@ -66,31 +84,14 @@ function writePassword() {
   passwordText.value = password;
 }
 
+//Assignment Code
+var generateBtn = document.querySelector("#generate");
+
 // Add event listener to generate button
 
-var randomfunc = {
-  lower: randomLC,
-  upper: randomUC,
-  number: randomNo,
-  special: randomSC,
-};
-
-generateBtn.addEventListener("click", function () {
-  var length = lengthEL.value;
-  var hasLower= LCaseEL.true
-  var hasUpper= UCaseEL.true 
-  var hasNumber= NumberEL.true 
-  var hasSpecChar= SpecCharEL.true 
-console.log("click")
-});
+generateBtn.addEventListener("click", writePassword);
+console.log("click");
 var password = "";
-
-
-
-
-var
-
-//Generator functions
 
 function randomLC() {
   return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
@@ -107,4 +108,3 @@ function randomNo() {
 function randomSC() {
   return String.fromCharCode(Math.floor(Math.random() * 15) + 33);
 }
-
