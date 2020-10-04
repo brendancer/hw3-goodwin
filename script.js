@@ -1,5 +1,4 @@
 //generating prompt for length of password--establishing pwl
-var password = [];
 
 var pwl = prompt(
   "Please choose a password length between 8 and 128 characters"
@@ -15,12 +14,14 @@ while (pwl < 8 || pwl > 128) {
     alert("Your Password will be " + pwl + " characters long.");
 }
 
-//boolean confirm generation
+//this is an array I'll use to count the character types
+var char = [];
+
+//boolean confirms generation--and counting of char.types
 var pwlc = confirm("would you like to include lowercase letters?");
 if (pwlc == true) {
-  var lower = randomLC();
-  password.push(lower);
-
+  var lower;
+  char.push(lower);
   alert("I'll include lowercase letters");
 } else {
   alert("i won't use lower case letters");
@@ -29,8 +30,8 @@ if (pwlc == true) {
 var pwuc = confirm("would you like to include uppercase letters?");
 
 if (pwuc == true) {
-  var upper = randomUC();
-  password.push(upper);
+  var upper;
+  char.push(upper);
   alert("I'll include uppercase letters");
 } else {
   alert("i won't use upper case letters");
@@ -39,8 +40,8 @@ if (pwuc == true) {
 var pwn = confirm("would you like to include numbers?");
 
 if (pwn == true) {
-  var number = randomNo();
-  password.push(number);
+  var number;
+  char.push(number);
   alert("I'll include numbers");
 } else {
   alert("i won't use numbers");
@@ -49,57 +50,93 @@ if (pwn == true) {
 var pwsp = confirm("would you like to include Special Characters?");
 
 if (pwsp == true) {
-  var special = randomSC();
-  password.push(special);
+  var special;
+  char.push(special);
   alert("I'll include special characters");
 } else {
   alert("i won't use special characters");
 }
 
 //rejecting a zero choice of character type
-while (password.length == 0) {
-  prompt(
+if (char.length == 0) {
+  alert(
     "you must choose at least one type of character. Please refresh the page to try again."
   );
 }
 
-//finding 4 random numbers that will add up to 128function get3Numbers(pwl) {
-var max = 128;
-var r1 = randombetween(1, max - randombetween(1, 128));
-var r2 = randombetween(1, max - 2 - r1);
-var r3 = randombetween(1, max - 1 - r1 - r2);
-var r4 = max - r1 - r2 - r3;
+//determining of how many of each chosen type of character will be used--extras at the end to enhance randomness
+var typecount = char.length;
+var numbereach = Math.ceil(pwl / typecount) + 3;
 
-function randombetween(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-console.log(r1, r2, r3, r4);
+//Creating the bigarray
 
-var typecount = password.length;
+var bigarray = [];
 
-console.log(password, typecount);
-
-//Get password of the right length
-for (var i = 0; i <= pwl; i++) {
-  password.push([i]);
+if (pwlc === true) {
+  for (a = 0; a < numbereach; a++) {
+    bigarray.push(randomLC());
+  }
 }
 
-// Write password to the #password input
-function writePassword() {
-  var password = generatePassword();
-  var passwordText = document.querySelector("#password");
-
-  passwordText.value = password;
+if (pwuc === true) {
+  for (a = 0; a < numbereach; a++) {
+    bigarray.push(randomUC());
+  }
 }
+
+if (pwn === true) {
+  for (a = 0; a < numbereach; a++) {
+    bigarray.push(randomNo());
+  }
+}
+
+if (pwsp === true) {
+  for (a = 0; a < numbereach; a++) {
+    bigarray.push(randomSC());
+  }
+}
+//shuffling the bigarray so that randomness is increased when array is sliced. I found this code at  https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array . I customized it slightly for my use.
+
+function shuffle(bigarray) {
+  var currentIndex = bigarray.length,
+    temporaryValue,
+    randomIndex;
+
+  while (0 !== currentIndex) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = bigarray[currentIndex];
+    bigarray[currentIndex] = bigarray[randomIndex];
+    bigarray[randomIndex] = temporaryValue;
+  }
+
+  return bigarray;
+}
+
+shuffle(bigarray);
+var almost = bigarray.slice(0, pwl);
+
+//var almost contains the completed password, but contained in an array. I join them so that they will be a string, appropriate to display in the UI
+
+password = almost.join("");
+console.log(password);
+
+// tried to change password into an object so that the button might work. I never got it to work, but it no longer throws an error.
+var passwordobj = new Object();
+var a = almost.join("");
+var b = password;
+passwordobj[a] = b;
 
 //Assignment Code
 var generateBtn = document.querySelector("#generate");
 
 // Add event listener to generate button
 
-generateBtn.addEventListener("click", writePassword);
+generateBtn.addEventListener("click", passwordobj);
 console.log("click");
-var password = "";
+
+//These are my random character generators. The idea to use the charset came from a tutorial by Traversy Media.
+//https://www.youtube.com/watch?v=duNmhKgtcsI
 
 function randomLC() {
   return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
