@@ -1,3 +1,4 @@
+//generating prompt for length of password--establishing pwl
 var password = [];
 
 var pwl = prompt(
@@ -10,10 +11,11 @@ if (pwl < 8 || pwl > 128) {
       pwl +
       ". Please choose a number between 8-128. Refresh your screen to try again"
   );
-  stop;
+  return;
 } else {
   alert("Your Password will be " + pwl + " characters long.");
 }
+console.log(pwl);
 //boolean confirm generation
 var pwlc = confirm("would you like to include lowercase letters?");
 if (pwlc == true) {
@@ -54,26 +56,30 @@ if (pwsp == true) {
 } else {
   alert("i won't use special characters");
 }
-//creating an array of objects
-var ch = [{ pwlc }, { pwuc }, { pwn }, { pwsp }].filter(
-  (item) => Object.values(item)[0]
-);
 
-console.log(password);
+//finding 4 random numbers that will add up to 128function get3Numbers(pwl) {
+var max = 128;
+var r1 = randombetween(1, max - randombetween(1, 128));
+var r2 = randombetween(1, max - 2 - r1);
+var r3 = randombetween(1, max - 1 - r1 - r2);
+var r4 = max - r1 - r2 - r3;
 
-var typecount = ch.length;
+function randombetween(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+console.log(r1, r2, r3, r4);
+var typecount = password.length;
 
-console.log(ch, typecount);
+console.log(password, typecount);
 
 //rejecting a zero choice of character type
-if (ch.length == 0) {
+if (password.length == 0) {
   alert("you must choose at least one type of character");
 }
-var password = [];
 
 //Get password of the right length
 for (var i = 0; i <= pwl; i++) {
-  password.push(ch[i]);
+  password.push([i]);
 }
 
 // Write password to the #password input
